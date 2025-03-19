@@ -62,3 +62,9 @@ void telem_UART_Init(void)
 
     nvic_irq_enable(DMA1_Channel3_2_IRQn, 3, 0);
 }
+
+void setBaudRate(uint32_t baudr){
+  usart_enable(USART1, FALSE);
+  usart_init(USART1, baudr, USART_DATA_8BITS, USART_STOP_1_BIT);
+  usart_enable(USART1, TRUE);
+}

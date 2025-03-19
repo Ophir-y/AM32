@@ -88,5 +88,11 @@ void send_telem_DMA(uint8_t bytes)
     LL_USART_SetTransferDirection(USART1, LL_USART_DIRECTION_RX);
 }
 
-
+void setBaudRate(uint32_t baudr){
+  LL_USART_Disable(USART1);
+  LL_USART_SetBaudRate(USART1, LL_APB2_GRP1_PERIPH_USART1, LL_USART_PRESCALER_DIV1,
+                                          LL_USART_OVERSAMPLING_16,
+                                          baudr);
+  LL_USART_Enable(USART1);
+}
 

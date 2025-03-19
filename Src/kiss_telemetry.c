@@ -1,6 +1,8 @@
 #include "kiss_telemetry.h"
 #include "eeprom.h"
 
+volatile uint8_t voltaraDetected;
+
 extern uint8_t get_crc8(uint8_t* Buf, uint8_t BufLen);
 
 uint8_t aTxBuffer[49] __attribute__((aligned(4)));
@@ -24,9 +26,15 @@ void makeTelemPackage(uint8_t temp, uint16_t voltage, uint16_t current, uint16_t
     telem_pkt->consumption_l = consumption & 0xFF;
 
     // eRPM * 100, so 1 in the packet means 100 eRPM
-    telem_pkt->erpm_h = (e_rpm >> 8) & 0xFF;
-    telem_pkt->erpm_l = e_rpm & 0xFF;
 
+    if (voltaraDetected < 20) {
+        voltaraDetected++;
+        telem_pkt->erpm_h = 0xFF; // voltara detection first 20 loops
+        telem_pkt->erpm_l = 0xFE; // am32 can be FE
+    } else {
+        telem_pkt->erpm_h = (e_rpm >> 8) & 0xFF;
+        telem_pkt->erpm_l = e_rpm & 0xFF;
+    }
     telem_pkt->crc = get_crc8((uint8_t*)telem_pkt, sizeof(telem_pkt) - 1);
 }
 

@@ -11,6 +11,7 @@
 #include "functions.h"
 #include "sounds.h"
 #include "targets.h"
+#include "serial_telemetry.h"
 #if DRONECAN_SUPPORT
 #include "DroneCAN/DroneCAN.h"
 #endif
@@ -203,9 +204,14 @@ void computeDshotDMA()
                     case 21:
                         forward = eepromBuffer.dir_reversed;
                         break;
+                    case 30:
+                        setBaudRate(115200);
+                        break;
+                    case 31:
+                        setBaudRate(2000000);
+                        break;
                     case 36:
                         programming_mode = 1;
-              //          armed = 0;           // disarm when entering programming mode
                         break;
                     }
                     last_dshot_command = dshotcommand;

@@ -4,14 +4,14 @@
  *  Created on: Apr. 22, 2020
  *      Author: Alka
  */
-
+#include "serial_telemetry.h"
 #include "dshot.h"
 #include "IO.h"
 #include "common.h"
 #include "functions.h"
 #include "sounds.h"
 #include "targets.h"
-#include "serial_telemetry.h"
+
 #if DRONECAN_SUPPORT
 #include "DroneCAN/DroneCAN.h"
 #endif
@@ -205,10 +205,10 @@ void computeDshotDMA()
                         forward = eepromBuffer.dir_reversed;
                         break;
                     case 30:
-                        setBaudRate(115200);
+                        setBaudRate(115200); // for ultra
                         break;
                     case 31:
-                        setBaudRate(2000000);
+                        setBaudRate(2000000); // for ultra
                         break;
                     case 36:
                         programming_mode = 1;

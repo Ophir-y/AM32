@@ -6,10 +6,9 @@
  */
 
 #include "serial_telemetry.h"
-#include "kiss_telemetry.h"
-
-#include "main.h"
+#include "targets.h"
 #include "common.h"
+#include "kiss_telemetry.h"
 
 void telem_UART_Init(void)
 {
@@ -66,4 +65,10 @@ void send_telem_DMA(uint8_t bytes)
     dma_channel_enable(DMA_CH1);
     usart_receive_config(USART0, USART_RECEIVE_ENABLE);
     //  usart_transmit_config(USART0, USART_TRANSMIT_DISABLE);
+}
+
+void setBaudRate(uint32_t baudr){
+usart_disable(USART0);
+usart_baudrate_set(USART0, baudr);
+usart_enable(USART0);
 }

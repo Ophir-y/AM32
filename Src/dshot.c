@@ -154,7 +154,7 @@ void computeDshotDMA()
                         play_tone_flag = 2;
                         break;
                     case 3:
-                        play_tone_flag = 3;
+                        play_tone_flag = 3;                        
                         break;
                     case 4:
                         play_tone_flag = 4;
@@ -208,7 +208,7 @@ void computeDshotDMA()
                         setBaudRate(115200); // for ultra
                         break;
                     case 31:
-                        setBaudRate(2000000); // for ultra
+                        setBaudRate(2000000); // for ultra                       
                         break;
                     case 36:
                         programming_mode = 1;

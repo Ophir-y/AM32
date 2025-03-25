@@ -193,11 +193,16 @@ void DMA1_Channel4_5_IRQHandler(void)
  */
 void ADC1_COMP_IRQHandler(void)
 {
-    if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_21) != RESET) {
-        LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_21);
-        interruptRoutine();
-    }
-    //
+  if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_21) != RESET) {
+      if((INTERVAL_TIMER->CNT) > ((average_interval>>1))){
+      LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_21);;
+      interruptRoutine();
+  }else{ 
+      if (getCompOutputLevel() == rising){
+      LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_21);;
+  }
+}
+}
 }
 
 /**

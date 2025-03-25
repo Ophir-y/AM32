@@ -49,8 +49,8 @@ void telem_UART_Init(void)
     dma_init_struct.loop_mode_enable = FALSE;
     dma_init(DMA1_CHANNEL2, &dma_init_struct);
 
- //   DMA1_CHANNEL2->ctrl |= DMA_FDT_INT;
- //   DMA1_CHANNEL2->ctrl |= DMA_DTERR_INT;
+   // DMA1_CHANNEL2->ctrl |= DMA_FDT_INT;
+   // DMA1_CHANNEL2->ctrl |= DMA_DTERR_INT;
 
     /* configure usart1 param */
     usart_init(USART1, 115200, USART_DATA_8BITS, USART_STOP_1_BIT);

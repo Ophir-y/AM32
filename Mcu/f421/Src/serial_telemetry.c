@@ -64,6 +64,7 @@ void telem_UART_Init(void)
 }
 
 void setBaudRate(uint32_t baudr){
+  DMA1_CHANNEL2->ctrl_bit.chen = FALSE;
   usart_enable(USART1, FALSE);
   usart_init(USART1, baudr, USART_DATA_8BITS, USART_STOP_1_BIT);
   usart_enable(USART1, TRUE);

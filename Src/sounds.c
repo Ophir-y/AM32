@@ -18,6 +18,7 @@
 #endif
 
 uint8_t beep_volume;
+uint8_t beeping;
 
 void pause(uint16_t ms)
 {
@@ -97,7 +98,7 @@ void playBlueJayTune()
 void playStartupTune()
 {
     __disable_irq();
-
+//    beeping = 1;
     if (eepromBuffer.tune[0] != ERASED_FLASH_BYTE) {
         playBlueJayTune();
     } else {
@@ -122,6 +123,7 @@ void playStartupTune()
 
     SET_AUTO_RELOAD_PWM(TIMER1_MAX_ARR);
     __enable_irq();
+  //  beeping = 0;
 }
 
 void playBrushedStartupTune()
@@ -176,8 +178,9 @@ void playDuskingTune()
 
 void playInputTune2()
 {
+beeping = 1;
     SET_AUTO_RELOAD_PWM(TIM1_AUTORELOAD);
-    __disable_irq();
+  //  __disable_irq();
     RELOAD_WATCHDOG_COUNTER();
     SET_PRESCALER_PWM(60);
     setCaptureCompare();
@@ -192,12 +195,14 @@ void playInputTune2()
     SET_PRESCALER_PWM(0);
     signaltimeout = 0;
     SET_AUTO_RELOAD_PWM(TIMER1_MAX_ARR);
-    __enable_irq();
+  //  __enable_irq();
+beeping = 0;
 }
 
 void playInputTune()
 {
-    __disable_irq();
+    beeping = 1;
+  //  __disable_irq();
     SET_AUTO_RELOAD_PWM(TIM1_AUTORELOAD);
     RELOAD_WATCHDOG_COUNTER();
     SET_PRESCALER_PWM(80);
@@ -212,7 +217,8 @@ void playInputTune()
     SET_PRESCALER_PWM(0);
     signaltimeout = 0;
     SET_AUTO_RELOAD_PWM(TIMER1_MAX_ARR);
-    __enable_irq();
+   // __enable_irq();
+    beeping = 0;
 }
 
 void playDefaultTone()
@@ -250,7 +256,6 @@ void playChangedTone()
 void playBeaconTune3()
 {
     SET_AUTO_RELOAD_PWM(TIM1_AUTORELOAD);
-    __disable_irq();
     setCaptureCompare();
     for (int i = 119; i > 0; i = i - 2) {
         RELOAD_WATCHDOG_COUNTER();
@@ -262,5 +267,4 @@ void playBeaconTune3()
     SET_PRESCALER_PWM(0);
     signaltimeout = 0;
     SET_AUTO_RELOAD_PWM(TIMER1_MAX_ARR);
-    __enable_irq();
 }

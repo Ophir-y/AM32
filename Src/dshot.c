@@ -11,6 +11,7 @@
 #include "functions.h"
 #include "sounds.h"
 #include "targets.h"
+#include "kiss_telemetry.h"
 
 #if DRONECAN_SUPPORT
 #include "DroneCAN/DroneCAN.h"
@@ -44,7 +45,7 @@ char dshot_extended_telemetry = 0;
 uint16_t send_extended_dshot = 0;
 uint16_t processtime = 0;
 uint16_t halfpulsetime = 0;
-
+extern uint16_t consumed_current;
 uint8_t programming_mode;
 uint16_t position;
 uint8_t  new_byte;
@@ -118,6 +119,22 @@ void computeDshotDMA()
             if ((tocheck <= 47) && (tocheck > 0)) {
                 newinput = 0;
                 dshotcommand = tocheck; //  todo
+//                if(dshotcommand == 30){
+//                  command_count ++;
+//                  if(command_count > 10){
+//                     setBaudRate(115200); // for ultra
+//                     command_count = 0;
+//                     return;
+//                   }
+//                }
+//                if(dshotcommand == 31){
+//                  command_count ++;
+//                  if(command_count > 10){
+//                    setBaudRate(2000000); // for ultra
+//                    command_count = 0;
+//                    return;
+//                }
+//                }
             }
             if (tocheck == 0) {
                 if (EDT_ARM_ENABLE == 1) {
@@ -134,7 +151,7 @@ void computeDshotDMA()
                 command_count = 0;
             }
 
-            if ((dshotcommand > 0) && (running == 0) && armed) {
+            if ((dshotcommand > 0) && (running == 0)) {
                 if (dshotcommand != last_command) {
                     last_command = dshotcommand;
                     command_count = 0;

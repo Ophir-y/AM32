@@ -902,7 +902,7 @@ void startMotor()
 
 void setInput()
 {
-
+if (!beeping){
     if (eepromBuffer.bi_direction) {
         if (dshot == 0) {
             if (eepromBuffer.rc_car_reverse) {
@@ -1217,10 +1217,12 @@ if (!stepper_sine && armed) {
         }
     }
 #endif
+}  //beeping
 }
 
 void tenKhzRoutine()
 { // 20khz as of 2.00 to be renamed
+    
     duty_cycle = duty_cycle_setpoint;
     tenkhzcounter++;
     ledcounter++;
@@ -1284,7 +1286,7 @@ void tenKhzRoutine()
     }
 
 #ifndef BRUSHED_MODE
-
+if(!beeping){
     if (!stepper_sine) {
 #ifndef CUSTOM_RAMP
         if (old_routine && running) {
@@ -1403,6 +1405,7 @@ void tenKhzRoutine()
                 adjusted_duty_cycle = ((duty_cycle * tim1_arr) / 2000);
             }
         }
+
         last_duty_cycle = duty_cycle;
         SET_AUTO_RELOAD_PWM(tim1_arr);
         SET_DUTY_CYCLE_ALL(adjusted_duty_cycle);
@@ -1417,10 +1420,13 @@ void tenKhzRoutine()
     } else {
         signaltimeout = 0;
     }
+
 #else
     signaltimeout++;
 
 #endif
+}
+
 }
 
 void processDshot()
@@ -1434,6 +1440,19 @@ void processDshot()
         compute_dshot_flag = 0;
         return;
     }
+    #ifdef USE_SERIAL_TELEMETRY
+       if (send_telemetry) {
+            makeTelemPackage((int8_t)degrees_celsius, battery_voltage, actual_current,
+                (uint16_t)(consumed_current >> 16), e_rpm);
+            send_telem_DMA(10);
+            send_telemetry = 0;
+
+        } else if(send_esc_info_flag ) {
+           makeInfoPacket();
+           send_telem_DMA(49);
+           send_esc_info_flag = 0;
+        }
+    #endif
     setInput();
 }
 
@@ -1749,6 +1768,7 @@ int main(void)
     if (drive_by_rpm) {
         use_speed_control_loop = 1;
     }
+
 #endif
 
 #endif // end fixed duty mode ifdef
@@ -1929,18 +1949,19 @@ if(zero_crosses < 5){
              NVIC_SetPriority(COMPARATOR_IRQ, 0);
          }
 #endif
-        if (send_telemetry) {
-#ifdef USE_SERIAL_TELEMETRY
-            makeTelemPackage((int8_t)degrees_celsius, battery_voltage, actual_current,
-                (uint16_t)(consumed_current >> 16), e_rpm);
-            send_telem_DMA(10);
-            send_telemetry = 0;
-#endif
-        } else if(send_esc_info_flag ) {
-           makeInfoPacket();
-           send_telem_DMA(49);
-           send_esc_info_flag = 0;
-        }
+//        if (send_telemetry) {
+//#ifdef USE_SERIAL_TELEMETRY
+//            makeTelemPackage((int8_t)degrees_celsius, battery_voltage, actual_current,
+//                (uint16_t)(consumed_current >> 16), e_rpm);
+//            send_telem_DMA(10);
+//            send_telemetry = 0;
+
+//        } else if(send_esc_info_flag ) {
+//           makeInfoPacket();
+//           send_telem_DMA(49);
+//           send_esc_info_flag = 0;
+//        }
+//#endif
         adc_counter++;
         if (adc_counter > 200) { // for adc and telemetry
 #if defined(STMICRO)

@@ -36,9 +36,6 @@ void makeTelemPackage(uint8_t temp, uint16_t voltage, uint16_t current, uint16_t
         voltaraDetected++;
         telem_pkt->erpm_h = 0xFF; // voltara detection first 20 loops
         telem_pkt->erpm_l = 0xFC; // am32 can be FE
-//    if(voltaraDetected ==  20){
-//    setBaudRate(2000000);
-//    }
     } else {
         telem_pkt->erpm_h = (e_rpm >> 8) & 0xFF;
         telem_pkt->erpm_l = e_rpm & 0xFF;

@@ -24,7 +24,7 @@ void telem_UART_Init()
     GPIO_InitStruct.Pin = LL_GPIO_PIN_6;
     GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
     GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
-    GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;
+    GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
     GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
     GPIO_InitStruct.Alternate = LL_GPIO_AF_0;
     LL_GPIO_Init(GPIOB, &GPIO_InitStruct);
@@ -50,7 +50,7 @@ void telem_UART_Init()
     LL_DMA_SetMemorySize(DMA1, LL_DMA_CHANNEL_3, LL_DMA_MDATAALIGN_BYTE);
 
     USART_InitStruct.PrescalerValue = LL_USART_PRESCALER_DIV1;
-    USART_InitStruct.BaudRate = 115200;
+    USART_InitStruct.BaudRate =115200;
     USART_InitStruct.DataWidth = LL_USART_DATAWIDTH_8B;
     USART_InitStruct.StopBits = LL_USART_STOPBITS_1;
     USART_InitStruct.Parity = LL_USART_PARITY_NONE;
@@ -73,17 +73,26 @@ void telem_UART_Init()
     LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_3, sizeof(aTxBuffer));
 
     /* (5) Enable DMA transfer complete/error interrupts  */
-    LL_DMA_EnableIT_TC(DMA1, LL_DMA_CHANNEL_3);
-    LL_DMA_EnableIT_TE(DMA1, LL_DMA_CHANNEL_3);
+  //  LL_DMA_EnableIT_TC(DMA1, LL_DMA_CHANNEL_3);
+  //  LL_DMA_EnableIT_TE(DMA1, LL_DMA_CHANNEL_3);
 }
 
 void send_telem_DMA(uint8_t bytes)
 { // set data length and enable channel to start transfer
     LL_USART_SetTransferDirection(USART1, LL_USART_DIRECTION_TX);
-    //  GPIOB->OTYPER &= 0 << 6;
+    LL_DMA_DisableChannel(DMA1, LL_DMA_CHANNEL_3);
     LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_3, bytes);
     LL_USART_EnableDMAReq_TX(USART1);
 
     LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_3);
     LL_USART_SetTransferDirection(USART1, LL_USART_DIRECTION_RX);
+}
+
+void setBaudRate(uint32_t baudr){
+if(baudr == 115200){
+USART1->BRR = 0x022C;
+}
+if (baudr == 2000000){
+USART1->BRR = 0x020;
+}
 }

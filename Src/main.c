@@ -1763,7 +1763,6 @@ int main(void)
 
 #else
     // checkForHighSignal();     // will reboot if signal line is high for 10ms
-
     receiveDshotDma();
     if (drive_by_rpm) {
         use_speed_control_loop = 1;

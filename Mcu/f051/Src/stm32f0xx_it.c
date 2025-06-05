@@ -28,6 +28,8 @@
 /* USER CODE BEGIN Includes */
 #include "ADC.h"
 #include "targets.h"
+#include "comparator.h"
+#include "common.h"
 
 extern void transfercomplete();
 extern void PeriodElapsedCallback();
@@ -43,7 +45,6 @@ extern char servoPwm;
 extern char dshot_telemetry;
 extern char armed;
 extern char out_put;
-extern char compute_dshot_flag;
 /* USER CODE END EV */
 
 uint16_t interrupt_time = 0;

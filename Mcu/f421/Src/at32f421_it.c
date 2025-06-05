@@ -188,6 +188,11 @@ void ADC1_CMP_IRQHandler(void)
         EXINT->intsts = EXTI_LINE;
     }
   }
+
+//   if ((EXINT->intsts & EXTI_LINE) != (uint32_t)RESET) {
+//        EXINT->intsts = EXTI_LINE;
+//        interruptRoutine();
+//    }
 }
 
 /**

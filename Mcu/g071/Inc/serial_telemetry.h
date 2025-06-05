@@ -12,5 +12,6 @@
 
 void telem_UART_Init(void);
 void send_telem_DMA(uint8_t bytes);
+void setBaudRate(uint32_t baudr);
 
 #endif /* SERIAL_TELEMETRY_H_ */

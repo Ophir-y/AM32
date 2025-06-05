@@ -221,12 +221,14 @@ void computeDshotDMA()
                     case 21:
                         forward = eepromBuffer.dir_reversed;
                         break;
+#ifndef MCU_F031
                     case 30:
                         setBaudRate(115200); // for ultra
                         break;
                     case 31:
                         setBaudRate(2000000); // for ultra                       
                         break;
+#endif
                     case 36:
                         programming_mode = 1;
                         break;
